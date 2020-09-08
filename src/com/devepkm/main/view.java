@@ -14,6 +14,8 @@ import com.devepkm.utils.KeyboardUtils;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+
 import java.util.List;
 
 public class view {
@@ -21,8 +23,8 @@ public class view {
     static Connection conn = JDBCUtils.getConnection();
 
 
-    public void main(String[] args) {
-        run();
+    public static void main(String[] args) {
+        new view().run();
 
     }
 
@@ -38,14 +40,18 @@ public class view {
             int i = KeyboardUtils.selectUser();
 
             if (i == 1) {
-                verifyStudent(conn);
+                Student s = verifyStudent(conn);
+                if (s != null) {
+                    Result rs = getStdResult(conn, s.getHkid());
+                    System.out.println(rs);
+                }
+
             } else if (i == 2) {
                 boolean verifyTeacher = verifyTeacher(conn);
                 if (verifyTeacher) {
                     System.out.println("1. Get all Students Information");
                     System.out.println("2. Get all Students's result");
-                    System.out.println("3. modify student information");
-                    System.out.println("4. modify student's result");
+                    System.out.println("3. modify student's result");
                     int option = KeyboardUtils.readOption();
                     switch (option) {
                         case 1:
@@ -55,8 +61,9 @@ public class view {
                             getAllStudentResults(conn);
                             break;
                         case 3:
+                            modifyStudentResult();
                             break;
-                        case 4:
+                        default:
                             break;
                     }
                 }
@@ -67,13 +74,47 @@ public class view {
         JDBCUtils.closeResource(conn, null, null);
 
 
+    }
+
+    private void modifyStudentResult() {
+        Student s = verifyStudent(conn);
+        if (s != null) {
+            String id = s.getHkid();
+            modifyResult(id);
+
+
+        } else {
+            printError();
+        }
+
 
     }
+
+    private void modifyResult(String hkid) {
+
+        ResultDAOImp rsImp = new ResultDAOImp();
+        Result rs = new Result();
+
+        System.out.println("Chinese");
+        rs.setChinese(String.valueOf(KeyboardUtils.readResult()));
+
+        System.out.println("English");
+        rs.setEnglish(String.valueOf(KeyboardUtils.readResult()));
+
+        System.out.println("Maths");
+        rs.setMaths(String.valueOf(KeyboardUtils.readResult()));
+
+        System.out.println("Liberal Studies");
+        rs.setLiberalStudies(String.valueOf(KeyboardUtils.readResult()));
+        rsImp.modifyResult(conn,hkid,rs);
+
+    }
+
 
     private void getAllStudentResults(Connection conn) {
         StudentResultDAOImp resultDAO = new StudentResultDAOImp();
         List<StudentResult> allResult = resultDAO.getAllResult(conn);
-        for (StudentResult s : allResult){
+        for (StudentResult s : allResult) {
             System.out.println(s);
         }
 
@@ -89,15 +130,15 @@ public class view {
     }
 
 
-    public void verifyStudent(Connection conn) {
-        Object[] stdInfo = getStdInfo();
+    public Student verifyStudent(Connection conn) {
+        Student stdInfo = getStdInfo();
         if (stdInfo != null) {
             StudentDAOImp stdImp = new StudentDAOImp();
             String sql = "SELECT HKID hkid, Name name, Birth birth, AdmissionID admissionID FROM student WHERE HKID = ? AND Name = ? AND Birth = ? AND AdmissionID = ?";
             boolean verify = stdImp.verify(conn, Student.class, sql, stdInfo);
+
             if (verify) {
-                Result rs = getStdResult(conn, (String) stdInfo[0]);
-                System.out.println(rs);
+                return stdInfo;
 
             } else {
                 printError();
@@ -107,28 +148,32 @@ public class view {
             printError();
 
         }
+        return null;
     }
 
-    private Object[] getStdInfo() {
-        Object[] objs = new Object[4];
+    private Student getStdInfo() {
+        Student s = new Student();
         System.out.println("Enter HKID: ");
         String hkid = KeyboardUtils.readString();
-        objs[0] = hkid;
+        s.setHkid(hkid);
         System.out.println("Enter Name: ");
         String name = KeyboardUtils.readString();
-        objs[1] = name;
+        s.setName(name);
         System.out.println("Enter Date of birth(YYYY-MM-DD): ");
         String dob = KeyboardUtils.readString();
         try {
-            objs[2] = new SimpleDateFormat("yyyy-MM-dd").parse(dob);
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = sdf1.parse(dob);
+            java.sql.Date sqlStartDate = new java.sql.Date(date.getTime());
+            s.setBirth(sqlStartDate);
         } catch (ParseException e) {
             return null;
         }
         System.out.println("Enter admissionID: ");
         String admissionID = KeyboardUtils.readString();
-        objs[3] = admissionID;
+        s.setAdmissionID(admissionID);
 
-        return objs;
+        return s;
     }
 
     private Result getStdResult(Connection conn, String hkid) {

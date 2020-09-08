@@ -11,7 +11,12 @@ public class StudentDAOImp extends DAO implements StudentDAO {
 
 
     @Override
-    public boolean verify(Connection conn, Class<Student> clazz, String sql, Object... args) {
+    public boolean verify(Connection conn, Class<Student> clazz, String sql, Student s) {
+        Object[] args = new Object[4];
+        args[0] = s.getHkid();
+        args[1] = s.getName();
+        args[2] = s.getBirth();
+        args[3] = s.getAdmissionID();
         Student instance = getInstance(conn, clazz, sql, args);
         return (instance == null) ? false : true;
     }

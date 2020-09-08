@@ -16,7 +16,7 @@ public class KeyboardUtils {
             String s = sc.next();
             try {
                 parseInt = Integer.parseInt(s);
-                if (parseInt <= 4 && parseInt > 0) {
+                if (parseInt <= 3 && parseInt > 0) {
                     break;
                 }
             } catch (NumberFormatException e) {
@@ -32,7 +32,30 @@ public class KeyboardUtils {
 
 
     }
+    public static int readResult() {
 
+
+        int parseInt = 0;
+        while (sc.hasNext()) {
+            String s = sc.next();
+            try {
+                parseInt = Integer.parseInt(s);
+                if (parseInt <= 7 && parseInt >= 0) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+
+            }
+            System.out.println("Invalid Input!");
+            System.out.print("Option: ");
+        }
+
+
+
+        return parseInt;
+
+
+    }
 
     public static int selectUser() {
 
