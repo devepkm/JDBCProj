@@ -69,7 +69,7 @@ public class Result {
                 ", chinese='" + chinese + '\'' +
                 ", english='" + english + '\'' +
                 ", maths='" + maths + '\'' +
-                ", liberalStudies='" + liberalStudies + '\'' +
+                ", Liberal Studies='" + liberalStudies + '\'' +
                 '}';
     }
 }
