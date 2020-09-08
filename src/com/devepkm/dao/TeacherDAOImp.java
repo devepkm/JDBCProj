@@ -7,13 +7,13 @@ import com.devepkm.bean.Teacher;
 
 import java.sql.Connection;
 
-public class TeacherDAOImp extends DAO implements TeacherDAO {
+public class TeacherDAOImp extends DAO<Teacher> implements TeacherDAO {
 
     @Override
-    public boolean verifyTeacher(Connection conn, Class<Teacher> clazz, String sql, Object... args) {
+    public boolean verifyTeacher(Connection conn, String sql, Object... args) {
 
 
-        Teacher tinstance = getInstance(conn, Teacher.class, sql, args);
+        Teacher tinstance = getInstance(conn, sql, args);
 
         return (tinstance == null) ? false : true;
     }
