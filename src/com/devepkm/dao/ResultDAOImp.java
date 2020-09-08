@@ -4,13 +4,8 @@ package com.devepkm.dao;
 import com.devepkm.bean.Result;
 
 import java.sql.Connection;
-import java.util.List;
 
-
-import java.sql.Connection;
-import java.util.List;
-
-public class ResultDAOImp extends DAO implements ResultDAO{
+public class ResultDAOImp extends DAO implements ResultDAO {
 
 
     @Override
@@ -20,6 +15,20 @@ public class ResultDAOImp extends DAO implements ResultDAO{
         return getInstance(conn, clazz, sql, args);
     }
 
+    @Override
+    public void modifyResult(Connection conn, String hkid, Result rs) {
+        String sql = "UPDATE result SET chinese = ?, english = ?, maths = ?, LiberalStudies = ?  WHERE hkid = ?;";
+        Object[] args = new Object[5];
+        args[0] = rs.getChinese();
+        args[1] = rs.getEnglish();
+        args[2] = rs.getMaths();
+        args[3] = rs.getLiberalStudies();
+        args[4] = hkid;
+        update(conn, sql, args);
+
+    }
 
 
 }
+
+
