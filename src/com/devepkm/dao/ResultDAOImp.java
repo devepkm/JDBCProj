@@ -5,14 +5,14 @@ import com.devepkm.bean.Result;
 
 import java.sql.Connection;
 
-public class ResultDAOImp extends DAO implements ResultDAO {
+public class ResultDAOImp extends DAO<Result> implements ResultDAO {
 
 
     @Override
-    public Result getResult(Connection conn, Class<Result> clazz, String sql, Object... args) {
+    public Result getResult(Connection conn, String sql, Object... args) {
 
 
-        return getInstance(conn, clazz, sql, args);
+        return getInstance(conn, sql, args);
     }
 
     @Override

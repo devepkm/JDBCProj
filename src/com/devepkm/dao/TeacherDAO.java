@@ -5,5 +5,5 @@ import com.devepkm.bean.Teacher;
 import java.sql.Connection;
 
 public interface TeacherDAO {
-    boolean verifyTeacher(Connection conn, Class<Teacher> clazz, String sql, Object... args);
+    boolean verifyTeacher(Connection conn, String sql, Object... args);
 }

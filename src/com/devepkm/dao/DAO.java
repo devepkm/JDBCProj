@@ -3,11 +3,25 @@ package com.devepkm.dao;
 import com.devepkm.utils.JDBCUtils;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DAO {
+public abstract class DAO<T> {
+
+    // get the generic type of the child class
+
+    private Class<T> clazz = null;
+
+    {
+        //this refers to childDAO class obj, not DAO
+        Type genericSuperclass = this.getClass().getGenericSuperclass();
+        ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+        clazz = (Class) actualTypeArguments[0];
+    }
 
     public static int update(Connection conn, String sql, Object... args) {
 
@@ -28,7 +42,7 @@ public abstract class DAO {
     }
 
 
-    public static <T> T getInstance(Connection conn, Class<T> clazz, String sql, Object... args) {
+    public T getInstance(Connection conn, String sql, Object... args) {
 
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -69,7 +83,7 @@ public abstract class DAO {
         return null;
     }
 
-    public static <T> List<T> getInstanceList(Connection conn, Class<T> clazz, String sql, Object... args) {
+    public List<T> getInstanceList(Connection conn, String sql, Object... args) {
 
         PreparedStatement ps = null;
         ResultSet rs = null;

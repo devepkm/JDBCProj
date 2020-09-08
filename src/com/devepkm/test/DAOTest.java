@@ -2,6 +2,7 @@ package com.devepkm.test;
 
 import com.devepkm.bean.Result;
 import com.devepkm.dao.DAO;
+import com.devepkm.dao.ResultDAOImp;
 import com.devepkm.utils.JDBCUtils;
 import org.junit.Test;
 
@@ -31,8 +32,10 @@ public class DAOTest {
         Object[] args = new Object[1];
         args[0] = new String("Y583039(a)");
         Result rs = new Result();
+        ResultDAOImp temp = new ResultDAOImp();
 
-        Result instance = DAO.getInstance(conn, rs.getClass(), sql, args);
+
+        Result instance = temp.getInstance(conn, sql, args);
         System.out.println(instance);
 
         JDBCUtils.closeResource(conn, null, null);
@@ -44,9 +47,10 @@ public class DAOTest {
 
         String sql = "Select HKID hkid, Chinese chinese, English english, Maths maths, LiberalStudies liberalStudies from result";
         Result rs = new Result();
+        ResultDAOImp temp = new ResultDAOImp();
 
 
-        List<? extends Result> instanceList = DAO.getInstanceList(conn, rs.getClass(), sql, null);
+        List<? extends Result> instanceList = temp.getInstanceList(conn, sql, null);
 
         for (Result a : instanceList) {
             System.out.println(a);

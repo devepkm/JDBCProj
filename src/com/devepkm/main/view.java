@@ -122,7 +122,7 @@ public class view {
 
     private void getAllStudents(Connection conn) {
         StudentDAOImp studentDAOImp = new StudentDAOImp();
-        List<Student> allStudents = studentDAOImp.getAllStudent(conn, Student.class);
+        List<Student> allStudents = studentDAOImp.getAllStudent(conn);
         for (Student s : allStudents) {
             System.out.println(s);
         }
@@ -135,7 +135,7 @@ public class view {
         if (stdInfo != null) {
             StudentDAOImp stdImp = new StudentDAOImp();
             String sql = "SELECT HKID hkid, Name name, Birth birth, AdmissionID admissionID FROM student WHERE HKID = ? AND Name = ? AND Birth = ? AND AdmissionID = ?";
-            boolean verify = stdImp.verify(conn, Student.class, sql, stdInfo);
+            boolean verify = stdImp.verify(conn, sql, stdInfo);
 
             if (verify) {
                 return stdInfo;
@@ -181,7 +181,7 @@ public class view {
         String sql = "Select HKID hkid, Chinese chinese, English english, Maths maths, LiberalStudies liberalStudies from result where hkid = ?";
         Object[] ojs = new Object[1];
         ojs[0] = hkid;
-        Result result = rsImp.getResult(conn, Result.class, sql, ojs);
+        Result result = rsImp.getResult(conn, sql, ojs);
         return result;
     }
 
@@ -199,7 +199,7 @@ public class view {
         if (techerInfo != null) {
             String sql = "SELECT ID id, Password password from teacher where id = ? AND password = ?";
             TeacherDAOImp teacherDAOImp = new TeacherDAOImp();
-            boolean verifyTeacher = teacherDAOImp.verifyTeacher(conn, Teacher.class, sql, techerInfo);
+            boolean verifyTeacher = teacherDAOImp.verifyTeacher(conn, sql, techerInfo);
             if (verifyTeacher) {
                 return true;
 
