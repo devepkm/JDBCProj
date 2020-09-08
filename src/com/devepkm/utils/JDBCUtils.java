@@ -15,7 +15,8 @@ public class JDBCUtils {
             InputStream is = null;
 
             try {
-                is = JDBCUtils.class.getClassLoader().getResourceAsStream("dbresource/config.properties");
+
+                is = JDBCUtils.class.getClassLoader().getResourceAsStream("com/devepkm/dbResource/config.properties");
                 Properties pros = new Properties();
                 pros.load(is);
                 String user = pros.getProperty("user");

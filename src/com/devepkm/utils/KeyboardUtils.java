@@ -1,4 +1,4 @@
 package com.devepkm.utils;
 
-public class Keyboard {
+public class KeyboardUtils {
 }
